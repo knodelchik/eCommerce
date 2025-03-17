@@ -40,7 +40,7 @@ class App extends React.Component {
       <div className="wrapper">
         <Header order={this.state.order} onDelete={this.deleteOrder}/>
         <Items items={this.state.items} onAdd={this.addToOrder} />
-        <Footer />
+        <Footer/>
       </div>
 
     )
