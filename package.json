@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://knodelchik.github.io/eCommerce/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -16,4 +17,5 @@
     "@preact/preset-vite": "^2.10.1",
     "vite": "^6.2.0"
   }
+  
 }
