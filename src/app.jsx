@@ -2,12 +2,15 @@ import React from 'preact/compat'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import Items from './components/Items'
+import Categories from './components/Categories'
+import ShowFullItem from './components/ShowFullItem'
 
 class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       order: [],
+      currentItems: [],
       items: [
         { id: 1, title: "Gray Chair", img: "chair-grey.jpeg", desc: "Comfortable gray chair for home and office.", category: "chairs", price: "49.99" },
         { id: 2, title: "Wooden Table", img: "table-wood.jpeg", desc: "Sturdy oak table for the living room.", category: "tables", price: "199.99" },
@@ -29,22 +32,50 @@ class App extends React.Component {
         { id: 18, title: "Vanity Table", img: "vanity-table.jpeg", desc: "Elegant table for cosmetics.", category: "tables", price: "179.99" },
         { id: 19, title: "Metal Shelf", img: "metal-shelf.jpeg", desc: "Sturdy metal shelf for storage.", category: "shelves", price: "139.99" },
         { id: 20, title: "Kids Bed", img: "kids-bed.jpeg", desc: "Comfortable bed for kids.", category: "beds", price: "299.99" }
-      ]
+      ],
+      showFullItem : false,
+      fullItem : {},
     }
+
+    this.state.currentItems = this.state.items
     this.addToOrder = this.addToOrder.bind(this)
     this.deleteOrder = this.deleteOrder.bind(this)
+    this.chooseCategory = this.chooseCategory.bind(this)
+    this.onShowItem = this.onShowItem.bind(this)
 
   }
   render() {
     return (
       <div className="wrapper">
-        <Header order={this.state.order} onDelete={this.deleteOrder}/>
-        <Items items={this.state.items} onAdd={this.addToOrder} />
-        <Footer/>
+        <Header order={this.state.order} onDelete={this.deleteOrder} />
+        <Categories chooseCategory={this.chooseCategory} />
+        <Items onShowItem={this.onShowItem} items={this.state.currentItems} onAdd={this.addToOrder} />
+        {this.state.showFullItem && <ShowFullItem item={this.state.fullItem} onAdd={this.addToOrder} onShowItem={this.onShowItem}/>}
+        <Footer />
       </div>
 
     )
   }
+
+  onShowItem (item) {
+    this.setState({fullItem:item})
+    this.setState({
+      showFullItem : !this.state.showFullItem
+    })
+  }
+
+  chooseCategory(category) {
+    if(category === "all") {
+      this.setState({
+        currentItems: this.state.items
+      })
+      return
+    }
+    this.setState({
+      currentItems: this.state.items.filter(el => el.category === category)
+    })
+  }
+
   addToOrder(item) {
     let isInArray = false
     this.state.order.forEach(el => {
@@ -54,8 +85,8 @@ class App extends React.Component {
     if (!isInArray)
       this.setState({ order: [...this.state.order, item] })
   }
-  deleteOrder(id) { 
-    this.setState({order: this.state.order.filter(el => el.id !== id)})
+  deleteOrder(id) {
+    this.setState({ order: this.state.order.filter(el => el.id !== id) })
   }
 }
 
